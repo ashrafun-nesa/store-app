@@ -43,7 +43,7 @@ export default function HomePage() {
     
 
     const handlePlus = () => {
-        if (inputs.input1.trim() === "" && inputs.input2.trim() === "") return; 
+        if (inputs.input1 == "" && inputs.input2 == "") return; 
         const newId = data.length;
         const newEntry: InputData = {
             id: newId,
@@ -75,9 +75,15 @@ export default function HomePage() {
                 <button className="px-5 py-2 bg-gray-400 cursor-pointer " onClick={handleAdd}>Add</button>
                 <button className="px-5 py-2 bg-gray-400 cursor-pointer " onClick={handlePlus}>Plus</button>
             </div>
+<<<<<<< HEAD
             <div className="flex flex-col gap-3 mt-5 w-full max-w-md">
                 {latest.map((item, index) => (
                     <div key={index} className="flex gap-2 items-center">
+=======
+            <div className="flex flex-col gap-3 ">
+                {latest.map((item) => (
+                    <div key={item.id} className="flex gap-2 items-center">
+>>>>>>> 1a32acf21bc51be3271ea402aeb8a47b0348c582
                         <input
                             className="border-2 rounded px-2 py-1 flex-1"
                             type="text"
@@ -100,7 +106,7 @@ export default function HomePage() {
                 ))}
             </div>
             {data.length > 0 && (
-                <table className="table-auto border-collapse border border-gray-400 mt-5">
+                <table className="table-auto border-collapse border border-gray-400 mt-10">
                     <thead>
                         <tr>
                             <th className="border border-gray-400 px-4 py-2">Input 1</th>
