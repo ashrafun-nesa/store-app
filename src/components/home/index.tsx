@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface InputData {
     id: number;
@@ -11,6 +11,7 @@ export default function HomePage() {
     const [inputs, setInputs] = useState({ input1: '', input2: '' });
     const [data, setData] = useState<InputData[]>([]);
     const [latest, setLatest] = useState<InputData[]>([]);
+    const [editId, setEditId] = useState<number | null>(null);
 
     const handleChange = (e: any) => {
         const {name, value} = e.target;
@@ -23,9 +24,23 @@ export default function HomePage() {
     }
 
     const handleAdd = () => {
-        setData(prev => [...prev, inputs])
-        setInputs({ input1: '', input2: '' });
+        if (inputs.input1 == "" && inputs.input2 == "") return;
+        if(editId != null) {
+           setData(prev => {
+            const updated = [...prev]
+            updated[editId] = {...inputs}
+            return updated;
+           })
+           console.log({editId})
+           setInputs({ input1: '', input2: '' });
+           setEditId(null);
+        }else{
+            setData(prev => [...prev, inputs])
+            setInputs({ input1: '', input2: '' });
+        }
+        
     }
+    
 
     const handlePlus = () => {
         if (inputs.input1.trim() === "" && inputs.input2.trim() === "") return; 
@@ -45,10 +60,13 @@ export default function HomePage() {
         setData(prev => prev.filter(item => item.id !== id));
     };
 
-
-
-    console.log(inputs)
-    console.log(data)
+    const handleEdit = (item: any, id: number) => {
+        console.log({id})
+        setInputs({ input1: item.input1, input2: item.input2 });
+        setEditId(id);
+        console.log({editId})
+    }
+    
     return (
         <div className="flex flex-col items-center justify-center p-5">
             <div className="flex gap-2 mb-10">
@@ -58,8 +76,8 @@ export default function HomePage() {
                 <button className="px-5 py-2 bg-gray-400 cursor-pointer " onClick={handlePlus}>Plus</button>
             </div>
             <div className="flex flex-col gap-3 mt-5 w-full max-w-md">
-                {latest.map((item) => (
-                    <div key={item.id} className="flex gap-2 items-center">
+                {latest.map((item, index) => (
+                    <div key={index} className="flex gap-2 items-center">
                         <input
                             className="border-2 rounded px-2 py-1 flex-1"
                             type="text"
@@ -94,6 +112,7 @@ export default function HomePage() {
                             <tr key={index}>
                                 <td className="border border-gray-400 px-4 py-2">{item.input1}</td>
                                 <td className="border border-gray-400 px-4 py-2">{item.input2}</td>
+                                <td className="border border-gray-400 px-4 py-2"><button className=" bg-blue-800 text-white cursor-pointer border py-1 px-2" onClick={() => handleEdit(item, index)}>edit</button></td>
                             </tr>
                         ))}
                     </tbody>
